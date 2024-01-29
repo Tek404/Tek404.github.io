@@ -136,26 +136,27 @@ function compareLargest(array) {
                     maximum = array[i][0]                 
                 }
             }
-        }    
+        }  
+        if(donggu===true){
+            alert("Jesus Christ! You get Dong GU 5x");
+        }
+        else if (bouyin===true){
+            alert("Congratulations! You get Bou Aces 4x");
+    
+        }
+        else if (boubou===true){
+            alert("Congratulations! You get Bou Bou 3x");
+    
+        }
+        else if (tendian===true){
+            alert("Congrats! You Get 10 dian 2x")
+        }
+        else{
+            alert("Erm u get " + maximum +" dian")
+        }  
     }
-    if(donggu===true){
-        alert("Jesus Christ! You get Dong GU 5x");
-    }
-    else if (bouyin===true){
-        alert("Congratulations! You get Bou Aces 4x");
 
-    }
-    else if (boubou===true){
-        alert("Congratulations! You get Bou Bou 3x");
 
-    }
-    else if (tendian===true){
-        alert("Congrats! You Get 10 dian 2x")
-    }
-    else{
-        alert("Erm u get " + maximum +" dian")
-    }
-}
 
 
 function updateSelectedNumbers() {
