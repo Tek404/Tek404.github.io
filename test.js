@@ -106,11 +106,11 @@ function compareLargest(array) {
                 bigger = true
                 donggu = true
             }
+            if ((array[i][0] === 1 || array[i][0] === 11) && (array[i][1] === 1 || array[i][1] === 11)){
+                bigger = true
+                bouyin = true
+            }
             if (array[i][0] === array[i][1]) {
-                if (array[i][0] === 11) {
-                    bigger = true
-                    bouyin = true
-                } else {
                     bigger = true
                     boubou = true
                 }
