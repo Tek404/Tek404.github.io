@@ -5,6 +5,8 @@ body {
     display: grid;
     justify-content: center;
     align-items: center;
+    touch-action: manipulation;
+
 }
 .calc_button{
     font-family: Arial, sans-serif;
@@ -16,6 +18,8 @@ body {
     grid-template-columns: repeat(4, 1fr);
     grid-column: 4 / 5; /* Start at column #4 and end at column #5 (the very right edge). */
     grid-row: 2 / span 4; /* Start at row #2 and span 4 rows */
+    touch-action: manipulation;
+
 }
 h2 {
     color: #333;
@@ -23,6 +27,8 @@ h2 {
 
 div {
     margin-bottom: 15px;
+    touch-action: manipulation;
+
 }
 
 label {
@@ -38,6 +44,8 @@ button {
     border: none;
     cursor: pointer;
     border-radius: 5px;
+    touch-action: manipulation;
+
 }
 
 button:hover {
@@ -53,6 +61,8 @@ button:hover {
 #variantsOutput {
     border: 1px solid #ccc;
     padding: 10px;
+    touch-action: manipulation;
+
 }
 
 div > div {
