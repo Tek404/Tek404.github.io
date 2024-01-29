@@ -1,0 +1,64 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    height: 10rem;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+.calc_button{
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    height: 10rem;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    grid-template-columns: repeat(4, 1fr);
+    grid-column: 4 / 5; /* Start at column #4 and end at column #5 (the very right edge). */
+    grid-row: 2 / span 4; /* Start at row #2 and span 4 rows */
+}
+h2 {
+    color: #333;
+}
+
+div {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+button {
+    background-color: #ff0000;
+    color: white;
+    padding: 10px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#selectedNumbers {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#variantsOutput {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+div > div {
+    margin-bottom: 5px;
+}
+
+div > div:last-child {
+    margin-bottom: 0;
+}
