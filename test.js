@@ -107,12 +107,13 @@ function compareLargest(array) {
                 donggu = true
             }
             if ((array[i][0] === 1 || array[i][0] === 11) && (array[i][1] === 1 || array[i][1] === 11)){
+                console.log("ping")
                 bigger = true
                 bouyin = true
             }
             if (array[i][0] === array[i][1]) {
                     bigger = true
-                    bouyin = true
+                    boubou = true
             }
         }
         if (array[i].length === 1) {
