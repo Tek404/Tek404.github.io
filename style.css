@@ -17,9 +17,15 @@ body {
     justify-content: center;
     align-items: center;
     grid-template-columns: repeat(4, 1fr);
-    grid-column: 4 / 5; /* Start at column #4 and end at column #5 (the very right edge). */
-    grid-row: 2 / span 4; /* Start at row #2 and span 4 rows */
+    /* grid-column: 4 / 5;  */
+    /* grid-row: 2 / span 4;  */
+    grid-gap: 10px;
     touch-action: manipulation;
+}
+
+button{
+    width:100px;
+    height: 300px;
 }
 
 .calc_button > button {
