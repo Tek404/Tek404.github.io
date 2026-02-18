@@ -167,7 +167,7 @@ function compareLargest(array) {
     else{
         return {
             ranked: 1, 
-            msg: "Erm u get " + maximum +" dian"
+            msg: "Congrats? You got " + maximum +" dian"
         }
     }
 }
@@ -175,7 +175,15 @@ function compareLargest(array) {
 
 function updateSelectedNumbers() {
     var selectedNumbersDiv = document.getElementById("selectedNumbers");
-    selectedNumbersDiv.innerHTML = selectedNumbers.join(', ');
+    const faceCards = {
+        20: 'J',
+        30: 'Q',
+        40: 'K',
+        11: '♠'
+    };
+
+    let remapOutputDisplay = selectedNumbers.map(e => faceCards[e] || e);
+    selectedNumbersDiv.innerHTML = remapOutputDisplay.join(', ');
     var finallist = []
     var finallist2 = []
 
@@ -229,10 +237,11 @@ function updateSelectedNumbers() {
         }
         const {ranked, msg} = compareLargest(finallist2)
         if(ranked > resultRanked){
+            resultRanked = ranked
             resultMsg = msg
         }
     }
-    alert(resultMsg)
+    showModal(resultMsg, resultRanked);
 
 }
 
@@ -267,3 +276,91 @@ function generateCombinationsBasedOnMode(arr, r) {
   backtrack(0, []);
   return result;
 }
+
+function launchConfetti() {
+    const canvas = document.getElementById('confettiCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const confettis = [];
+    const colors = ['#FFD700','#FF4500','#FF6347','#FF0000'];
+
+    for (let i = 0; i < 150; i++) {
+        confettis.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height - canvas.height,
+            r: Math.random() * 6 + 4,
+            d: Math.random() * 20,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            tilt: Math.random() * 10 - 10,
+            tiltAngle: 0,
+            tiltAngleIncrement: Math.random() * 0.07 + 0.05
+        });
+    }
+
+    let active = true;
+
+    function draw() {
+        if (!active) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        confettis.forEach(c => {
+            ctx.beginPath();
+            ctx.lineWidth = c.r / 2;
+            ctx.strokeStyle = c.color;
+            ctx.moveTo(c.x + c.tilt + c.r/2, c.y);
+            ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r/2);
+            ctx.stroke();
+
+            c.tiltAngle += c.tiltAngleIncrement;
+            c.y += (Math.cos(c.d) + 3 + c.r/2)/2;
+            c.x += Math.sin(c.tiltAngle);
+
+            if (c.y > canvas.height) {
+                c.y = -10;
+                c.x = Math.random() * canvas.width;
+            }
+        });
+
+        requestAnimationFrame(draw);
+    }
+
+    draw();
+
+    setTimeout(() => {
+        active = false;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }, 3000);
+}
+
+function showModal(message, rank) {
+    const modal = document.getElementById("resultModal");
+    const modalContent = modal.querySelector(".modal-content");
+    const modalMessage = document.getElementById("modalMessage");
+
+    modalMessage.innerHTML = message;
+    modal.classList.remove("hidden");
+
+    // Reset animations
+    modalContent.classList.remove("glow");
+    modalContent.style.animation = 'none';
+    void modalContent.offsetWidth; // force reflow to restart animation
+
+    // Pop-in effect
+    modalContent.style.animation = 'popIn 0.3s ease';
+
+    if(rank >= 4) {
+        modalContent.classList.add("glow");
+        launchConfetti();
+    } else if(rank === 1) {
+        // Shake for low rank
+        modalContent.style.animation = 'shake 0.5s';
+    }
+}
+
+function closeModal() {
+    document.getElementById("resultModal").classList.add("hidden");
+}
+
+

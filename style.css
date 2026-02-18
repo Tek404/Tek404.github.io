@@ -141,3 +141,82 @@ button:active {
     transform: translateY(0);
   }
 }
+
+/* Modal Overlay */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(139, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Modal Box */
+.modal-content {
+  background: #a30000;
+  padding: 30px 25px;
+  border-radius: 20px;
+  border: 3px solid gold;
+  text-align: center;
+  width: 85%;
+  max-width: 350px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  animation: popIn 0.3s ease;
+}
+
+/* Modal Title */
+.modal-content h2 {
+  color: gold;
+  margin-bottom: 15px;
+}
+
+/* Modal Message */
+#modalMessage {
+  color: gold;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+/* Close Button */
+.modal-close {
+  background: linear-gradient(145deg, gold, #ffcc00);
+  color: #8b0000;
+  font-weight: bold;
+}
+
+/* Pop-in animation for modal */
+@keyframes popIn {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Shake animation */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+  100% { transform: translateX(0); }
+}
+
+/* Glow effect */
+.glow {
+  box-shadow: 0 0 20px gold, 0 0 30px gold, 0 0 40px gold;
+}
+
+/* Confetti canvas */
+#confettiCanvas {
+  position: fixed;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+}

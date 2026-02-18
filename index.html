@@ -57,11 +57,22 @@
     </div>
 
 
-    <div class="results">
+    <div class="results hidden">
         <h3>Results</h3>
         <div id="variantsOutput"></div>
     </div>
 </div>
+
+<!-- CNY Result Modal -->
+<div id="resultModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>🧧 Result 🧧</h2>
+    <p id="modalMessage"></p>
+    <button class="modal-close" onclick="closeModal()">OK</button>
+  </div>
+</div>
+
+<canvas id="confettiCanvas"></canvas>
 
 </body>
 </html>
