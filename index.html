@@ -50,6 +50,8 @@
         <!-- Row 5 -->
         <button onclick="addNumber(40)">K</button>
         <button onclick="addNumber(11)">♠</button>
+        <button onclick="openDonationModal()">Donate</button>
+
 
         <!-- Row 6 -->
         <button class="calc-btn" onclick="updateSelectedNumbers()">Calculate</button>
@@ -69,6 +71,15 @@
     <h2>🧧 Result 🧧</h2>
     <p id="modalMessage"></p>
     <button class="modal-close" onclick="closeModal()">OK</button>
+  </div>
+</div>
+
+<!-- Donation Modal -->
+<div id="donationModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>🧧 Donation 🧧</h2>
+    <img src="assets/tng-qr-code.png" alt="Donation QR Code">
+    <button class="modal-close" onclick="closeDonationModal()">OK</button>
   </div>
 </div>
 

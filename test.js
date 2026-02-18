@@ -363,4 +363,12 @@ function closeModal() {
     document.getElementById("resultModal").classList.add("hidden");
 }
 
+function openDonationModal () {
+    document.getElementById("donationModal").classList.remove("hidden");
+    launchConfetti();
 
+}
+
+function closeDonationModal() {
+    document.getElementById("donationModal").classList.add("hidden");
+}
