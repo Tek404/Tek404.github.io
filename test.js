@@ -1,12 +1,13 @@
 
 var selectedNumbers = [];
+let modeType = 0
 
 function addNumber(number) {
-    if (selectedNumbers.length < 5) {
+    if (selectedNumbers.length < modeType) {
         selectedNumbers.push(number);
         updateSelectedNumbers();
     } else {
-        alert("You can only select up to 5 numbers.");
+        alert(`You can only select up to ${modeType} numbers.`);
     }
 }
 
@@ -94,7 +95,7 @@ function compareLargest(array) {
     var bouyin = false
     var boubou = false
     var tendian =false
-
+    console.log(array)
     for (let i = 0; i < array.length; i++) {
         if (array[i].length === 2) {
             if ((array[i][0] === 20 || array[i][0] === 30 || array[i][0] === 40) && array[i][1] === 11) {
@@ -107,7 +108,6 @@ function compareLargest(array) {
                 donggu = true
             }
             if ((array[i][0] === 1 || array[i][0] === 11) && (array[i][1] === 1 || array[i][1] === 11)){
-                console.log("ping")
                 bigger = true
                 bouyin = true
             }
@@ -136,24 +136,39 @@ function compareLargest(array) {
                     maximum = array[i][0]                 
                 }
             }
-        }    
+        }
     }
+    
     if(donggu===true){
-        alert("Jesus Christ! You get Dong GU 5x");
+        return {
+            ranked: 5, 
+            msg: "Heng Ong Huat, Ngau Dong Gu"
+        }
     }
     else if (bouyin===true){
-        alert("Congratulations! You get Bou Aces 4x");
-
+        return {
+            ranked: 4, 
+            msg: "Congratulations! You get Bou Aces 4x"
+        }
     }
     else if (boubou===true){
-        alert("Congratulations! You get Bou Bou 3x");
+        return {
+            ranked: 3, 
+            msg: "Congratulations! You get Bou Bou 3x"
+        }
 
     }
     else if (tendian===true){
-        alert("Congrats! You Get 10 dian 2x")
+        return {
+            ranked: 2, 
+            msg: "Congrats! You Get 10 dian 2x"
+        }
     }
     else{
-        alert("Erm u get " + maximum +" dian")
+        return {
+            ranked: 1, 
+            msg: "Erm u get " + maximum +" dian"
+        }
     }
 }
 
@@ -164,9 +179,19 @@ function updateSelectedNumbers() {
     var finallist = []
     var finallist2 = []
 
-    if (selectedNumbers.length === 5) {
+    let arrayComboToUse = []
+
+    if(selectedNumbers.length === modeType){
+        arrayComboToUse = generateCombinationsBasedOnMode(selectedNumbers, 5)
+    }else{
+        return
+    }
+    let resultRanked = 0
+    let resultMsg = ''
+    
+    for(const item of arrayComboToUse){
         var targetSums = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180];
-        const variantsngau = generateVariants(selectedNumbers)
+        const variantsngau = generateVariants(item)
 
         for (let variant of variantsngau) {
             finallist = []
@@ -202,6 +227,43 @@ function updateSelectedNumbers() {
                 document.getElementById("variantsOutput").appendChild(div);
             }
         }
-        compareLargest(finallist2)
+        const {ranked, msg} = compareLargest(finallist2)
+        if(ranked > resultRanked){
+            resultMsg = msg
+        }
+    }
+    alert(resultMsg)
+
 }
+
+function modeSetting(mode) {
+    document.getElementById("modeSelection").classList.add("hidden");
+    document.getElementById("mainCalc").classList.remove("hidden");
+    modeType = mode;
+}
+
+function showModeModel() {
+    document.getElementById("mainCalc").classList.add("hidden");
+    document.getElementById("modeSelection").classList.remove("hidden");
+}
+
+
+function generateCombinationsBasedOnMode(arr, r) {
+  const result = [];
+
+  function backtrack(start, combo) {
+    if (combo.length === r) {
+      result.push([...combo]);
+      return;
+    }
+
+    for (let i = start; i < arr.length; i++) {
+      combo.push(arr[i]);
+      backtrack(i + 1, combo);
+      combo.pop();
+    }
+  }
+
+  backtrack(0, []);
+  return result;
 }

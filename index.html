@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=0.8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Number Combinations Finder</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="test.js"></script>
@@ -12,38 +12,56 @@
 
 <h2>Ngau Calculator</h2>
 
-<div class="calc" style="display: flex; flex-direction: column;">
-    <label for="selectedNumbers">Select Numbers:</label>
-    <div id="selectedNumbers" class="output">
+<div id="modeSelection" class="mode-selection">
+    <p>Select Mode:</p>
+    <div class="mode-buttons">
+        <button onclick="modeSetting(5)">5 Card Mode</button>
+        <button onclick="modeSetting(6)">6 Card Mode</button>
+    </div>
+</div>
 
-    </div>
+<div id="mainCalc" class="calc hidden">
+    <button class="back-btn" onclick="showModeModel()">Back</button>
+
+    <label>Select Numbers:</label>
+    <div id="selectedNumbers" class="output"></div>
+
     <div class="calc_button">
-            <button onclick="addNumber(1)">1</button>
-            <button onclick="addNumber(2)">2</button>
-            <button onclick="addNumber(3)">3</button>
-            <button onclick="addNumber(4)">4</button>
-            <button onclick="addNumber(5)">5</button>
-            <button onclick="addNumber(6)">6</button>
-            <button onclick="addNumber(7)">7</button>
-            <button onclick="addNumber(8)">8</button>
-            <button onclick="addNumber(9)">9</button>
-            <button onclick="addNumber(10)">10</button>
-            <button onclick="addNumber(20)">J</button>
-            <button onclick="addNumber(30)">Q</button>
-            <button onclick="addNumber(40)">K</button>
-            <button  style="font-size: 30px;" onclick="addNumber(11)">&#9824</button>
-            <button onclick="clearNumbers()">Clear Numbers</button>
-            <button onclick="updateSelectedNumbers()">Calculate</button>
+        <!-- Row 1 -->
+        <button onclick="addNumber(1)">1</button>
+        <button onclick="addNumber(2)">2</button>
+        <button onclick="addNumber(3)">3</button>
+
+        <!-- Row 2 -->
+        <button onclick="addNumber(4)">4</button>
+        <button onclick="addNumber(5)">5</button>
+        <button onclick="addNumber(6)">6</button>
+
+        <!-- Row 3 -->
+        <button onclick="addNumber(7)">7</button>
+        <button onclick="addNumber(8)">8</button>
+        <button onclick="addNumber(9)">9</button>
+
+        <!-- Row 4 -->
+        <button onclick="addNumber(10)">10</button>
+        <button onclick="addNumber(20)">J</button>
+        <button onclick="addNumber(30)">Q</button>
+
+        <!-- Row 5 -->
+        <button onclick="addNumber(40)">K</button>
+        <button onclick="addNumber(11)">♠</button>
+
+        <!-- Row 6 -->
+        <button class="calc-btn" onclick="updateSelectedNumbers()">Calculate</button>
+        <button class="clear-btn" onclick="clearNumbers()">Clear</button>
     </div>
-    
-    <div>
+
+
+    <div class="results">
         <h3>Results</h3>
         <div id="variantsOutput"></div>
     </div>
-
 </div>
-
-
 
 </body>
 </html>
