@@ -30,27 +30,6 @@ function removeDuplicateArrays(nestedArray) {
 
     return filteredArray;
 }
-function generateVariants1(array) {
-    const variantsSet = new Set();
-
-    variantsSet.add(array.slice().sort());
-
-    for (let i = 0; i < array.length; i++) {
-        const variant1 = array.slice();
-
-        if (variant1[i] === 3) {
-            variant1[i] = 6;
-        } else if (variant1[i] === 6) {
-            variant1[i] = 3;
-        }
-
-        variantsSet.add(variant1.slice().sort());
-    }
-
-    const variants = [...variantsSet];
-    const removedduplicates = removeDuplicateArrays(variants)
-    return removedduplicates;
-    }
 
 function generateVariants(array) {
     const results = [];
@@ -58,26 +37,31 @@ function generateVariants(array) {
 
     function backtrack(index, current) {
         if (index === n) {
-            results.push(current.slice().sort((a,b)=>a-b));
+            results.push(current.slice());
             return;
         }
 
         // keep original
-        current.push(array[index]);
+        current.push({
+            value: array[index],
+            original: array[index]
+        });
         backtrack(index + 1, current);
         current.pop();
 
         // flip if 3 or 6
         if (array[index] === 3 || array[index] === 6) {
-            current.push(array[index] === 3 ? 6 : 3);
+            current.push({
+                value: array[index] === 3 ? 6 : 3,
+                original: array[index]   // keep original identity
+            });
             backtrack(index + 1, current);
             current.pop();
         }
     }
 
     backtrack(0, []);
-
-    return removeDuplicateArrays(results);
+    return results;
 }
 
 function findTriplets(initialNumbers, targetNumbers) {
@@ -86,7 +70,11 @@ function findTriplets(initialNumbers, targetNumbers) {
     for (let i = 0; i < initialNumbers.length - 2; i++) {
         for (let j = i + 1; j < initialNumbers.length - 1; j++) {
         for (let k = j + 1; k < initialNumbers.length; k++) {
-            const sum = initialNumbers[i] + initialNumbers[j] + initialNumbers[k];
+
+        const sum =
+            initialNumbers[i].value +
+            initialNumbers[j].value +
+            initialNumbers[k].value;
 
             if (targetNumbers.includes(sum)) {
             result.push([initialNumbers[i], initialNumbers[j], initialNumbers[k]]);
@@ -99,21 +87,19 @@ function findTriplets(initialNumbers, targetNumbers) {
     }
 
 function compareListsRemoveOccurrences(list1, list2) {
-    var occurrences = list1.slice();
-    var result_list = [];
+    const remaining = [...list1];
 
-    for (var i = 0; i < list2.length; i++) {
-        var item = list2[i];
+    for (let item of list2) {
+        const index = remaining.findIndex(
+            x => x.original === item.original && x.value === item.value
+        );
 
-        var index = occurrences.indexOf(item);
         if (index !== -1) {
-            occurrences.splice(index, 1);
-        } else {
-            result_list.push(item);
+            remaining.splice(index, 1);
         }
     }
 
-    return occurrences;
+    return remaining;
 }
 
 function compareLargest(array) {
@@ -126,35 +112,38 @@ function compareLargest(array) {
     var tendian =false
     for (let i = 0; i < array.length; i++) {
         if (array[i].length === 2) {
-            if ((array[i][0] === 20 || array[i][0] === 30 || array[i][0] === 40) && array[i][1] === 11) {
+            if ((array[i][0].value === 20 || array[i][0].value === 30 || array[i][0].value === 40) && array[i][1].value === 11) {
                 bigger = true
                 donggu = true
             }
 
-            if ((array[i][1] === 20 || array[i][1] === 30 || array[i][1] === 40) && array[i][0] === 11) {
+            if ((array[i][1].value === 20 || array[i][1].value === 30 || array[i][1].value === 40) && array[i][0].value === 11) {
                 bigger = true
                 donggu = true
             }
-            if ((array[i][0] === 1 || array[i][0] === 11) && (array[i][1] === 1 || array[i][1] === 11)){
+            if ((array[i][0].value === 1 || array[i][0].value === 11) && (array[i][1].value === 1 || array[i][1].value === 11)){
 
                 bigger = true
                 bouyin = true
             }
-            if (array[i][0] === array[i][1]) {
-
-                    bigger = true
-                    boubou = true
+            if (
+                array[i][0].value === array[i][1].value &&
+                array[i][0].original === array[i][1].original
+            ) {
+                bigger = true
+                boubou = true
             }
+
         }
         if (array[i].length === 1) {
-            if (array[i][0].toString().length == 2){
-                let numberString = array[i][0].toString();
+            if (array[i][0].value.toString().length == 2){
+                let numberString = array[i][0].value.toString();
                 let digit1 = parseInt(numberString.charAt(0));
                 let digit2 = parseInt(numberString.charAt(1));
                 if (digit2 === 0){
                     biggest = true
                     tendian = true
-                    maximum = array[i][0]
+                    maximum = array[i][0].value
                 }
                 if ((digit2>maximum)&& biggest === false){
                     maximum = digit2
@@ -162,8 +151,8 @@ function compareLargest(array) {
 
             }
             else{
-                if ((array[i][0] > maximum)&& biggest === false){
-                    maximum = array[i][0]                 
+                if ((array[i][0].value > maximum)&& biggest === false){
+                    maximum = array[i][0].value              
                 }
             }
         }
@@ -202,6 +191,105 @@ function compareLargest(array) {
     }
 }
 
+/**
+ * Returns leftover cards after finding a valid Ngau (3-card sum divisible by 10)
+ * @param {Array<Array<{value:number, original:number}>>} nestedArray 
+ * @returns {Array<Array<{value:number, original:number}>>} only leftover 2-card arrays
+ */
+function getNgauLeftovers(nestedArray) {
+    const targetSums = [10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180]; // sums divisible by 10
+    const leftovers = [];
+
+    for (let arr of nestedArray) {
+        let found = false;
+
+        // Find all triplets
+        for (let i = 0; i < arr.length - 2 && !found; i++) {
+            for (let j = i + 1; j < arr.length - 1 && !found; j++) {
+                for (let k = j + 1; k < arr.length && !found; k++) {
+                    const sum = arr[i].value + arr[j].value + arr[k].value;
+                    if (sum % 10 === 0 || targetSums.includes(sum)) {
+                        // valid Ngau found
+                        const remaining = arr.filter((_, idx) => idx !== i && idx !== j && idx !== k);
+                        leftovers.push(remaining); // push only the leftover 2 cards
+                    }
+                }
+            }
+        }
+    }
+
+    return leftovers;
+}
+
+/*
+ * Evaluate leftover 2-card arrays and return the highest ranked combo
+ * @param {Array<Array<{value:number, original:number}>>} leftoverArrays 
+ * @returns {{ranked:number, msg:string, bestPair:Array<{value:number, original:number}>}}
+ */
+function evaluateLeftoverPairs(leftoverArrays) {
+    let bestRank = 0;
+    let bestMsg = '';
+    let bestPair = null;
+
+    for (let pair of leftoverArrays) {
+        if (pair.length !== 2) continue; // must be 2-card pair
+        const [a, b] = pair;
+
+        // Rule 1: Donggu
+        if ((a.value === 11 && [20,30,40].includes(b.value)) || (b.value === 11 && [20,30,40].includes(a.value))) {
+            if (5 > bestRank) {
+                bestRank = 5;
+                bestMsg = "Heng Ong Huat, Ngau Dong Gu";
+                bestPair = pair;
+            }
+            continue;
+        }
+
+        // Rule 2: Bouyin
+        if ((a.value === 1 || a.value === 11) && (b.value === 1 || b.value === 11)) {
+            if (4 > bestRank) {
+                bestRank = 4;
+                bestMsg = "Congratulations! You get Bou Aces 4x";
+                bestPair = pair;
+            }
+            continue;
+        }
+
+        // Rule 3: Bou Bou
+        if (a.value === b.value && a.original === b.original) {
+            if (3 > bestRank) {
+                bestRank = 3;
+                bestMsg = "Congratulations! You get Bou Bou 3x";
+                bestPair = pair;
+            }
+            continue;
+        }
+
+        // Rule 4: Shidian (sum % 10 === 0)
+        if ((a.value + b.value) % 10 === 0) {
+            if (2 > bestRank) {
+                bestRank = 2;
+                bestMsg = "Congrats! You get Shidian 2x";
+                bestPair = pair;
+            }
+            continue;
+        }
+
+        // Rule 5: leftover dian (sum % 10)
+        const leftoverDian = (a.value + b.value) % 10;
+        if (1 > bestRank || (1 === bestRank && leftoverDian > ((bestPair[0].value + bestPair[1].value) % 10))) {
+            bestRank = 1;
+            bestMsg = `Congrats! You got ${leftoverDian} dian`;
+            bestPair = pair;
+        }
+    }
+
+    return {
+        ranked: bestRank,
+        msg: bestMsg,
+        bestPair
+    };
+}
 
 function updateSelectedNumbers() {
     var selectedNumbersDiv = document.getElementById("selectedNumbers");
@@ -214,9 +302,6 @@ function updateSelectedNumbers() {
 
     let remapOutputDisplay = selectedNumbers.map(e => faceCards[e] || e);
     selectedNumbersDiv.innerHTML = remapOutputDisplay.join(', ');
-    var finallist = []
-    var finallist2 = []
-
     let arrayComboToUse = []
 
     if(selectedNumbers.length === modeType){
@@ -226,58 +311,28 @@ function updateSelectedNumbers() {
     }
     let resultRanked = 0
     let resultMsg = ''
+    var finallist2 = []
     
     for(const item of arrayComboToUse){
-        var targetSums = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180];
-        const variantsngau = generateVariants(item)
 
-        for (let variant of variantsngau) {
-            finallist = []
-            var combos = findTriplets(variant, targetSums)
-            finallist2.push(variant)
-            for (let combo of combos) {
-                var sumtwotwo = []
-                var sumtwo = compareListsRemoveOccurrences(variant, combo)
-                var sum = sumtwo.reduce((accumulator, currentValue) => { return accumulator + currentValue; }, 0);
-                sumtwotwo.push(sum)
-                finallist2.push(combo)
-                finallist2.push(sumtwo)
-                finallist2.push(sumtwotwo)
-            }
-        }
-
-        document.getElementById("variantsOutput").innerHTML = "";
-
-        for (let i = 0; i < finallist2.length; i++) {
-            var div = document.createElement("div");
-
-            if (finallist2[i].length === 5) {
-                div.innerHTML = "Variants: " + JSON.stringify(finallist2[i]);
-                document.getElementById("variantsOutput").appendChild(div);
-            } else if (finallist2[i].length === 3) {
-                div.innerHTML = "Ngau: " + JSON.stringify(finallist2[i]);
-                document.getElementById("variantsOutput").appendChild(div);
-            } else if (finallist2[i].length === 2) {
-                div.innerHTML = "Sum: " + JSON.stringify(finallist2[i]);
-                document.getElementById("variantsOutput").appendChild(div);
-            } else if (finallist2[i].length === 1) {
-                div.innerHTML = "Dian: " + JSON.stringify(finallist2[i]);
-                document.getElementById("variantsOutput").appendChild(div);
-            }
-        }
-        const {ranked, msg} = compareLargest(finallist2)
-        if(ranked > resultRanked){
-            resultRanked = ranked
-            resultMsg = msg
-        }
+        const variants = generateVariants(item)
+        finallist2.push(...variants)
+  
     }
-    showModal(resultMsg, resultRanked);
-
+    const removeAndFindNgau = getNgauLeftovers(finallist2)
+    const bestResult = evaluateLeftoverPairs(removeAndFindNgau)
+    showModal(bestResult.msg, bestResult.ranked);
 }
 
 function modeSetting(mode) {
     document.getElementById("modeSelection").classList.add("hidden");
     document.getElementById("mainCalc").classList.remove("hidden");
+
+    var selectedNumbersDiv = document.getElementById("selectedNumbers");
+    selectedNumbersDiv.innerHTML = "";
+
+    selectedNumbers = []; // reset the array
+
     modeType = mode;
 }
 
