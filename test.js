@@ -15,6 +15,7 @@ function clearNumbers() {
     selectedNumbers = [];
     updateSelectedNumbers();
 }
+
 function removeDuplicateArrays(nestedArray) {
     const uniqueArrays = new Set();
 
@@ -29,7 +30,7 @@ function removeDuplicateArrays(nestedArray) {
 
     return filteredArray;
 }
-function generateVariants(array) {
+function generateVariants1(array) {
     const variantsSet = new Set();
 
     variantsSet.add(array.slice().sort());
@@ -38,9 +39,9 @@ function generateVariants(array) {
         const variant1 = array.slice();
 
         if (variant1[i] === 3) {
-        variant1[i] = 6;
+            variant1[i] = 6;
         } else if (variant1[i] === 6) {
-        variant1[i] = 3;
+            variant1[i] = 3;
         }
 
         variantsSet.add(variant1.slice().sort());
@@ -50,6 +51,34 @@ function generateVariants(array) {
     const removedduplicates = removeDuplicateArrays(variants)
     return removedduplicates;
     }
+
+function generateVariants(array) {
+    const results = [];
+    const n = array.length;
+
+    function backtrack(index, current) {
+        if (index === n) {
+            results.push(current.slice().sort((a,b)=>a-b));
+            return;
+        }
+
+        // keep original
+        current.push(array[index]);
+        backtrack(index + 1, current);
+        current.pop();
+
+        // flip if 3 or 6
+        if (array[index] === 3 || array[index] === 6) {
+            current.push(array[index] === 3 ? 6 : 3);
+            backtrack(index + 1, current);
+            current.pop();
+        }
+    }
+
+    backtrack(0, []);
+
+    return removeDuplicateArrays(results);
+}
 
 function findTriplets(initialNumbers, targetNumbers) {
     const result = [];
@@ -95,7 +124,6 @@ function compareLargest(array) {
     var bouyin = false
     var boubou = false
     var tendian =false
-    console.log(array)
     for (let i = 0; i < array.length; i++) {
         if (array[i].length === 2) {
             if ((array[i][0] === 20 || array[i][0] === 30 || array[i][0] === 40) && array[i][1] === 11) {
@@ -108,10 +136,12 @@ function compareLargest(array) {
                 donggu = true
             }
             if ((array[i][0] === 1 || array[i][0] === 11) && (array[i][1] === 1 || array[i][1] === 11)){
+
                 bigger = true
                 bouyin = true
             }
             if (array[i][0] === array[i][1]) {
+
                     bigger = true
                     boubou = true
             }
