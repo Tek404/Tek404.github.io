@@ -320,6 +320,10 @@ function updateSelectedNumbers() {
   
     }
     const removeAndFindNgau = getNgauLeftovers(finallist2)
+    if(removeAndFindNgau.length === 0 ){
+        showModal("No Ngau", 1);
+        return
+    }
     const bestResult = evaluateLeftoverPairs(removeAndFindNgau)
     showModal(bestResult.msg, bestResult.ranked);
 }
